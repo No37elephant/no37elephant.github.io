@@ -7,7 +7,16 @@
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
         <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
         <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
-        <link rel="stylesheet" type="text/css" href="main.css">
+        <style type="text/css">
+        body {
+          padding: 0;
+          margin: 0;
+        }
+        html, body, #mapid {
+          height: 100%;
+          width: 100vw;
+        }
+        </style>
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""/></script>
         <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     </head>
@@ -15,9 +24,13 @@
         <div id="mapid"></div>
 
         <script >
+            var latitude = '{{latitude}}' ;
+            var longitude = '{{longitude}}';
+
+
             var mymap = L.map('mapid', {
-              center: [25.03, 121.55],
-            zoom: 12});
+              center: [latitude, longitude],
+            zoom: 15});
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{tileSize}/{z}/{x}/{y}?access_token={accessToken}',
                         {maxZoom: 18,
                          id: 'mapbox/streets-v11',
@@ -29,7 +42,7 @@
             var markers = new L.MarkerClusterGroup().addTo(mymap);
 
             //爬json文件
-            var url = "https://raw.githubusercontent.com/No37elephant/ccClubFall2020/No37elephant-patch-1/ccClub/bar_result.json";
+            var url = "https://raw.githubusercontent.com/No37elephant/ccClubFall2020/No37elephant-patch-1/ccClub/overall.json";
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.open('get', url, true);
             xmlhttp.send();
@@ -40,10 +53,9 @@
               //javascript for 迴圈
               for (var i = 0; i < data.length; i++){
 
-                var shop = data[i].name
                 markers.addLayer(
-                L.marker([data[i].lat_lng[0], data[i].lat_lng[1]])
-              .bindPopup('<b>'+data[i].name+'</b><br><hr>'+
+                L.marker([data[i].lat, data[i].lng])
+              .bindPopup('<b>'+data[i].title+'</b><br><hr>'+
               '<b>地址： </b>'+data[i].address+'<br>'+
               '<b>電話： </b>'+data[i].tel+'<br>'+
               '<b>評分： </b>'+data[i].rating))
@@ -55,20 +67,33 @@
             }
 
 
+            var redIcon = new L.Icon({
+              iconUrl:'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+              shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+              popupAnchor: [1, -34],
+              shadowSize: [41, 41]
+            });
+
+            var urlocation = L.marker([latitude, longitude], {icon: redIcon}).addTo(mymap)
+            .bindPopup("<b>Here you are!</b>").openPopup();
+
+
 
             mymap.on()
 
 
 
-            //function onLocationFound(e){
-              //  var radius = e.accuracy;
+            /*function onLocationFound(e){
+                var radius = e.accuracy;
 
-                //L.marker(e.latlng).addTo(mymap)
-                //.bindPopup("You are within " + radius + " meters from this point.")
-                //.openPopup();
+                L.marker(e.latlng).addTo(mymap)
+                .bindPopup("You are within " + radius + " meters from this point.")
+                .openPopup();
 
-                //L.circle(e.latlng, radius/3).addTo(mymap);
-            //}
+                L.circle(e.latlng, radius/3).addTo(mymap);
+            } */
 
 
 
