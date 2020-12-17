@@ -24,12 +24,12 @@
         <div id="mapid"></div>
 
         <script >
-            var latitude = '{{latitude}}' || 25.0231;
-            var longitude = '{{longitude}}' || 121.32473;
+            var latitude = '{{latitude}}' || 25.0231 ;
+            var longitude = '{{longitude}}' || 121.32473 ;
 
 
             var mymap = L.map('mapid', {
-              center: [latitude, longitude],
+              center: [25.0231, 121.32473],
             zoom: 15});
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{tileSize}/{z}/{x}/{y}?access_token={accessToken}',
                         {maxZoom: 18,
@@ -76,7 +76,7 @@
               shadowSize: [41, 41]
             });
 
-            var urlocation = L.marker([latitude, longitude], {icon: redIcon}).addTo(mymap)
+            var urlocation = L.marker([25.0231, 121.32473], {icon: redIcon}).addTo(mymap)
             .bindPopup("<b>Here you are!</b>").openPopup();
 
 
